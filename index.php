@@ -28,30 +28,35 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title></title>
+    <title>GBN</title>
 </head>
 <body>
     <div id="wrapper">
         <div id="header">
-            <h1><a href="index.php">Galactic Bounties Network - GBN</a></h1>
+            <h1><a href="index.php">Galactic Bounties Network</a></h1>
         </div>
         <?php include('nav.php'); ?>
-        <div id="all-blogs">
-            <div class="blog-post">
+        <div id="all-bounties">
+            <div class="bounties-post">
                 <?php while($row = $statement->fetch()): ?>
                 <div class="paragraph">
-                    <h2><a href="show.php?id=<?= $row['id'] ?>"><?= $row['title'] ?></a></h2>
+                    <h2><a href="details.php?id=<?= $row['bounty_id'] ?>"><?= $row['title'] ?></a></h2>
                     <div class="date-stamp">
-                        <small><?= date("F d, Y, h:i a", strtotime($row['bounty_date'])) . " - "?><a href="edit.php?id=<?= $row['id'] ?>">edit</a></small>
+                        <small><?= date("F d, Y, h:i a", strtotime($row['bounty_date'])) . " - "?><a href="edit.php?id=<?= $row['bounty_id'] ?>">edit</a></small>
                     </div>
-                    <div class="blog-content">
-                        <p><?= $row['description'] ?></p>
+                    <div class="bounties-content">
+                        <p><?= htmlspecialchars($row['description']) ?></p>
+                        <p><strong>Name:</strong> <?= htmlspecialchars($row['name']) ?></p>
+                        <p><strong>Species:</strong> <?= htmlspecialchars($row['species']) ?></p>
+                        <p><strong>Reward:</strong> <?= htmlspecialchars($row['reward']) ?></p>
+                        <p><strong>Status:</strong> <?= htmlspecialchars($row['status']) ?></p>
+
                     </div>
                 </div>
                 <?php endwhile ?>
             </div>
         </div>
-        <!-- <?php include('footer.php'); ?> -->
+        <?php include('footer.php'); ?>
     </div>
 
 
