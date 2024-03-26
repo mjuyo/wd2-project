@@ -1,0 +1,142 @@
+/*******w******** 
+    
+    Name: Marco Juyo
+    Date: Marc 19th, 2024
+    Description: Styles
+
+****************/
+
+html,
+body,
+nav,
+footer,
+div,
+p,
+ul,
+li,
+h1,
+h2,
+h3,
+form {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #282828;
+    font-family: 'Poppins', sans-serif;
+    color: #9B9A9A;
+}
+
+a {
+    text-decoration: none;
+    color: seagreen;
+}
+
+a:hover {
+    color: #FBE778;
+}
+
+#wrapper {
+    background-color: #282828;
+    margin: 10px auto;
+    width: 70%;
+    border: 1px #9B9A9A solid;
+}
+
+#header {
+    text-align: center;
+    font-size: 18px;
+}
+
+#navbar ul {
+    padding: 10px 0px;
+    margin: 0;
+    list-style: none;
+    text-align: center;
+    justify-content: center;
+    display: flex;
+    font-size: 16px;
+    display: flex;
+    justify-content: space-around;
+}
+
+#navbar a {
+    color: #9B9A9A;
+}
+
+#navbar a.active {
+    color: #FBE778;
+}
+
+#navbar a:hover {
+    color: seagreen;
+    opacity: 0.5;
+}
+
+#menu li {
+    border: 1px #9B9A9A solid;
+    width: 100%;
+}
+
+#menu li a {
+    padding: 5px 10px;
+    display: block;
+    text-align: center;
+    font-size: 20px;
+}
+
+#all-bounties {
+    padding: 10px 20px;
+
+}
+
+.bounties-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    gap: 10px;
+}
+
+.bounties-post {
+    background-color: #333;
+    border: 1px solid #444;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 10px 0;
+    width: calc(33.333% - 50px);
+    min-width: 280px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    color: #FFF;
+    overflow: hidden;
+}
+
+.bounties-post h2 {
+    margin-bottom: 10px;
+}
+
+.bounties-post .date-stamp {
+    font-size: 0.9em;
+    margin-bottom: 15px;
+    font-weight: lighter;
+}
+
+.bounties-post img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 15px;
+}
+
+.bounties-post p {
+    margin-bottom: 10px;
+}
+
+.bounties-post .special-font {
+    font-family: 'Aurebesh', sans-serif;
+}
+
+.bounties-content {
+    font-weight: lighter;
+}    
+
+
