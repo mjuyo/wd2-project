@@ -13,6 +13,7 @@
     include __DIR__ . '/a/php-image-resize-master/lib/ImageResize.php';
     include __DIR__ . '/a/php-image-resize-master/lib/ImageResizeException.php';
 
+    use \Gumlet\ImageResize;
 
     function file_upload_path($original_filename, $upload_subfolder_name = 'uploads') {
        // $current_folder = dirname(__FILE__);
@@ -91,8 +92,8 @@
                         $image_path = $new_image_path;
 
                         // Resizing
-                        $image = new \Gumlet\ImageResize($new_image_path);
-                        $image->resizeToWidth(400);
+                        $image = new ImageResize($new_image_path);
+                        $image->crop(250, 250, true, ImageResize::CROPTOP);
                         $image->save($new_image_path);           
                     }
                 }
@@ -132,7 +133,7 @@
                     }                
                 }
 
-            
+
             }
         }
     }
@@ -195,7 +196,7 @@
             <h1><a href="index.php">Galactic Bounties Network - Edit</a></h1>
         </div>
         <?php include('nav.php'); ?>
-        <div id="all-bounties">
+        <div id="bounties-form">
             <?php if($bounty_id): ?>
                 <?php if(!empty($error)): ?>
                     <p class="error"><?= $error ?></p>
