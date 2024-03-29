@@ -37,9 +37,10 @@
     <title>GBN</title>
 </head>
 <body>
-    <div id="wrapper">
+    <div class="wrapper">
         <header id="header">
-            <h1><a href="index.php">Galactic Bounties Network</a></h1>
+            <h1 class="special-font"><a href="index.php">Galactic Bounties Network</a></h1>
+            <h2><a href="index.php">Galactic Bounties Network</a></h2>
         </header>
         <?php include('nav.php'); ?>
         <main id="all-bounties">
@@ -54,12 +55,12 @@
                             <?php if (!empty($row['image_path'])): ?>
                                 <img src="<?= $row['image_path'] ?>" alt="<?= $row['title'] ?>">
                             <?php elseif (empty($row['image_path'])): ?>
-                                <img src="images/hutt_logo.jpg" alt="No Image">
+                                <div class="no-photo">No Photo</div>
                             <?php endif ?>
                             <p><strong>Description:</strong> <?= $row['description'] ?></p>
                             <p><strong>Name:</strong> <?= $row['name'] ?></p>
                             <p><strong>Species:</strong> <?= $row['species'] ?></p>
-                            <p><strong>Reward:</strong> <?= $row['reward'] ?> <span class="special-font">$ </span></p>
+                            <p><strong>Reward:</strong> <?= number_format($row['reward']) ?> <span class="special-font">$ </span></p>
                             <p><strong>Status:</strong> <?= $row['status'] ?></p>
                         </div>
                     </div>

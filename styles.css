@@ -6,45 +6,34 @@
 
 ****************/
 
-html,
-body,
-nav,
-footer,
-div,
-p,
-ul,
-li,
-h1,
-h2,
-h3,
-form {
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-    background-color: #282828;
+    background-color: #1C1C1E;
     font-family: 'Poppins', sans-serif;
-    color: #9B9A9A;
+    color: #F2F2F7;
 }
 
 a {
     text-decoration: none;
-    color: seagreen;
+    color: #0A84FF;
 }
 
 a:hover {
     color: #FBE778;
 }
 
-#wrapper {
-    background-color: #282828;
+.wrapper {
     margin: 10px auto;
-    width: 70%;
-    border: 1px #9B9A9A solid;
+    width: 90%;
 }
 
 #header {
+    padding: 15px 0;
     text-align: center;
     font-size: 18px;
 }
@@ -70,8 +59,7 @@ a:hover {
 }
 
 #navbar a:hover {
-    color: seagreen;
-    opacity: 0.5;
+    color: #0A84FF;
 }
 
 #menu li {
@@ -109,6 +97,7 @@ a:hover {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     color: #FFF;
     overflow: hidden;
+    text-align: center;
 }
 
 .bounties-post h2 {
@@ -125,18 +114,67 @@ a:hover {
     max-width: 100%;
     height: auto;
     margin-bottom: 15px;
+    border-radius: 10px;
 }
 
 .bounties-post p {
     margin-bottom: 10px;
+    text-align: left;
 }
 
-.bounties-post .special-font {
+.special-font {
     font-family: 'Aurebesh', sans-serif;
+    color: #0A84FF;
 }
 
 .bounties-content {
     font-weight: lighter;
 }    
 
+/* Details */
+#bounties-details {
+    background-color: #333;
+    border: 1px solid #444;
+    border-radius: 10px;
+    padding: 20px 60px;
+    margin: 10px auto;
+    color: #FFF;
+    width: 40%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    text-align: center;
+}
+
+#bounties-details h2 {
+    margin: 0 auto;
+}
+
+#bounties-details .date-stamp {
+    font-size: 0.9em;
+    margin-bottom: 15px;
+    font-weight: lighter;
+}
+
+.bounties-description img {
+    max-width: 100%;
+    margin-bottom: 15px;
+    border-radius: 10px;
+}
+
+.bounties-description p {
+    margin-bottom: 10px;
+    font-weight: lighter;
+    text-align: left;
+}
+
+.no-photo {
+    margin: 0px auto 15px;
+    border-radius: 10px;
+    height: 250px;
+    width: 250px;
+    background-color: darkgrey;
+    color: whitesmoke;
+    font-size: 30px;
+    align-content: center;
+}
 

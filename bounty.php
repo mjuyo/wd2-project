@@ -10,8 +10,8 @@
 
     require('connect.php');
     require('authenticate.php');
-    include __DIR__ . '/a/php-image-resize-master/lib/ImageResize.php';
-    include __DIR__ . '/a/php-image-resize-master/lib/ImageResizeException.php';
+    include __DIR__ . '/php-image-resize-master/lib/ImageResize.php';
+    include __DIR__ . '/php-image-resize-master/lib/ImageResizeException.php';
 
     use \Gumlet\ImageResize;
 
@@ -129,7 +129,7 @@
     <title>GBN</title>
 </head>
 <body>
-    <div id="wrapper">
+    <div class="wrapper">
         <div id="header">
             <h1><a href="index.php">Galactic Bounties Network</a></h1>
         </div>

@@ -10,8 +10,8 @@
 
     require('connect.php');
     require('authenticate.php');
-    include __DIR__ . '/a/php-image-resize-master/lib/ImageResize.php';
-    include __DIR__ . '/a/php-image-resize-master/lib/ImageResizeException.php';
+    include __DIR__ . '/php-image-resize-master/lib/ImageResize.php';
+    include __DIR__ . '/php-image-resize-master/lib/ImageResizeException.php';
 
     use \Gumlet\ImageResize;
 
@@ -191,7 +191,7 @@
 </head>
 <body>
     <!-- Remember that alternative syntax is good and html inside php is bad -->
-    <div id="wrapper">
+    <div class="wrapper">
         <div id="header">
             <h1><a href="index.php">Galactic Bounties Network - Edit</a></h1>
         </div>
