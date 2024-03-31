@@ -8,6 +8,8 @@
 
 ****************/
 
+    session_start();
+
     require('connect.php');
 
     $query = "SELECT * FROM bounties ORDER BY bounty_date DESC";
@@ -38,11 +40,8 @@
 </head>
 <body>
     <div class="wrapper">
-        <header id="header">
-            <h1 class="special-font"><a href="index.php">Galactic Bounties Network</a></h1>
-            <h2><a href="index.php">Galactic Bounties Network</a></h2>
-        </header>
-        <?php include('nav.php'); ?>
+
+        <?php include('header.php'); ?>
         <main id="all-bounties">
             <section class="bounties-grid">
                 <?php while($row = $statement->fetch()): ?>

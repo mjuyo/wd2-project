@@ -8,8 +8,15 @@
 
 ****************/
 
+    session_start();
+
+    if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
+        header('Location: signin.php');
+        exit;
+    }
+
     require('connect.php');
-    require('authenticate.php');
+    // require('authenticate.php');
     include __DIR__ . '/php-image-resize-master/lib/ImageResize.php';
     include __DIR__ . '/php-image-resize-master/lib/ImageResizeException.php';
 
@@ -49,7 +56,7 @@
     $image_filename = '';
     $new_image_path = '';
 
-    if ($_POST && isset($_POST['title']) && isset($_POST['description'])) {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['title']) && isset($_POST['description'])) {
         // Sanitize user input
         $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -125,30 +132,25 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/aurebesh" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <title>GBN</title>
 </head>
 <body>
     <div class="wrapper">
-        <div id="header">
-            <h1><a href="index.php">Galactic Bounties Network</a></h1>
-        </div>
-        <?php include('nav.php'); ?>
-        <div id="bounties-form">
+        <?php include('header.php'); ?>
+        <div id="bounties-form-wrapper">
             <?php if(!empty($error)): ?>
                 <p class="error"><?= $error ?></p>
             <?php endif ?>
-            <form method="post" action="bounty.php" enctype="multipart/form-data">
+            <form method="post" action="bounty.php" class="bounty-form" enctype="multipart/form-data">
                 <fieldset>
-                    <legend>New Bounty</legend>
+                    <!-- <legend>New Bounty</legend> -->
                     <div>
                         <label for="title">Title</label>
                         <input type="text" id="title" name="title" value="<?= isset($_POST['title']) ? htmlspecialchars($_POST['title']) : '' ?>" />
                     </div>
-                    <div>
-                        <label for="description">Description</label>
-                        <textarea id="description" name="description"><?= isset($_POST['description']) ? htmlspecialchars($_POST['description']) : '' ?></textarea>
-                    </div>
+                    
                     <div>
                         <label for="name">Name</label>
                         <input type="text" id="name" name="name" value="<?= isset($_POST['name']) ? htmlspecialchars($_POST['name']) : '' ?>" />
@@ -160,6 +162,10 @@
                     <div>
                         <label for="reward">Reward</label>
                         <input type="number" id="reward" name="reward" value="<?= isset($_POST['reward']) ? htmlspecialchars($_POST['reward']) : '' ?>" />
+                    </div>
+                    <div>
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" rows="4"><?= isset($_POST['description']) ? htmlspecialchars($_POST['description']) : '' ?></textarea>
                     </div>
                     <div>
                         <label for="status">Status</label>

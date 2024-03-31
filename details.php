@@ -8,6 +8,8 @@
 
 ****************/
 
+    session_start();
+
     require('connect.php');
 
     // Sanitize $_GET['bounty_id'] to ensure it is a integer
@@ -37,6 +39,28 @@
         exit;
     }
 
+
+    // Handle comment submission
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['comment_text'])) {
+        $comment_text = filter_input(INPUT_POST, 'comment_text', FILTER_SANITIZE_STRING);
+        $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING) ?: 'Anonymous';  // Default to 'Anonymous' if not provided
+
+        // Insert comment and username into the database
+        $insertQuery = "INSERT INTO comments (bounty_id, username, comment_text) VALUES (:bounty_id, :username, :comment_text)";
+        $insertStmt = $db->prepare($insertQuery);
+        $insertStmt->bindValue(':bounty_id', $bounty_id, PDO::PARAM_INT);
+        $insertStmt->bindValue(':username', $username, PDO::PARAM_STR);
+        $insertStmt->bindValue(':comment_text', $comment_text, PDO::PARAM_STR);
+        $insertStmt->execute();
+    }
+
+    // Fetching existing comments for the bounty
+    $commentsQuery = "SELECT username, comment_text, comment_date FROM comments WHERE bounty_id = :bounty_id ORDER BY comment_date DESC";
+    $commentsStmt = $db->prepare($commentsQuery);
+    $commentsStmt->bindValue(':bounty_id', $bounty_id, PDO::PARAM_INT);
+    $commentsStmt->execute();
+    $comments = $commentsStmt->fetchAll();
+
     function is_active($link) {
         // Get the current page file name
         $current_page = basename($_SERVER['PHP_SELF']); 
@@ -62,11 +86,8 @@
 <body>
     <!-- Remember that alternative syntax is good and html inside php is bad -->
     <div class="wrapper">
-        <header id="header">
-            <h1 class="special-font"><a href="index.php">Galactic Bounties Network - <?= $row['title'] ?></a></h1>
-            <h2><a href="index.php">Galactic Bounties Network - <?= $row['title'] ?></a></h2>
-        </header>
-        <?php include('nav.php'); ?>
+
+        <?php include('header.php'); ?>
         <main id="bounties-details">
             <h2><?= $row['title'] ?></h2>
             <div class="date-stamp">
@@ -85,6 +106,29 @@
                 <p><strong>Status:</strong> <?= $row['status'] ?></p>
             </div>
         </main>
+        <div class="comments-section">
+            <h3>Comments</h3>
+            <form method="POST" action="details.php?bounty_id=<?= $bounty_id ?>">
+                <div>
+                    <label for="username">Name</label>
+                    <input type="text" id="username" name="username" />
+                </div>
+                <div>
+                    <label for="comment_text">Comment</label>
+                    <textarea name="comment_text" rows="4" required></textarea>
+                </div>
+                <button type="submit">Add Comment</button>
+            </form>
+            <div class="comments-list">
+                <?php foreach ($comments as $comment): ?>
+                    <div class="comment">
+                        <p class="intel-by">Intel by <strong><?= htmlspecialchars($comment['username']) ?></strong><p>
+                        <p><?= htmlspecialchars($comment['comment_text']) ?></p>
+                        <small>On <?= date("F d, Y, h:i a", strtotime($comment['comment_date'])) ?></small>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
         <?php include('footer.php'); ?>
     </div>
 </body>

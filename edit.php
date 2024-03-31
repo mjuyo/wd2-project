@@ -8,8 +8,10 @@
 
 ****************/
 
+    session_start();
+    
     require('connect.php');
-    require('authenticate.php');
+    // require('authenticate.php');
     include __DIR__ . '/php-image-resize-master/lib/ImageResize.php';
     include __DIR__ . '/php-image-resize-master/lib/ImageResizeException.php';
 
@@ -186,6 +188,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/aurebesh" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <title>GBN</title>
 </head>
@@ -195,7 +198,7 @@
         <div id="header">
             <h1><a href="index.php">Galactic Bounties Network - Edit</a></h1>
         </div>
-        <?php include('nav.php'); ?>
+        <?php include('header.php'); ?>
         <div id="bounties-form">
             <?php if($bounty_id): ?>
                 <?php if(!empty($error)): ?>
