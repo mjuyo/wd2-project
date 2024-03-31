@@ -10,6 +10,11 @@
 
     session_start();
 
+    if (!isset($_SESSION['is_admin'])) {
+        // Default value for users who are not logged in or are not admins
+        $_SESSION['is_admin'] = false; 
+    }
+
     require('connect.php');
 
     // Sanitize $_GET['bounty_id'] to ensure it is a integer
@@ -42,20 +47,25 @@
 
     // Handle comment submission
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['comment_text'])) {
-        $comment_text = filter_input(INPUT_POST, 'comment_text', FILTER_SANITIZE_STRING);
-        $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING) ?: 'Anonymous';  // Default to 'Anonymous' if not provided
+        
+        if ($_POST['captcha'] !== $_SESSION['captcha']) {
+            $error = "Incorrect CAPTCHA, please try again.";
+        } else {
+            $comment_text = filter_input(INPUT_POST, 'comment_text', FILTER_SANITIZE_STRING);
+            $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING) ?: 'Anonymous';  // Default to 'Anonymous' if not provided
 
-        // Insert comment and username into the database
-        $insertQuery = "INSERT INTO comments (bounty_id, username, comment_text) VALUES (:bounty_id, :username, :comment_text)";
-        $insertStmt = $db->prepare($insertQuery);
-        $insertStmt->bindValue(':bounty_id', $bounty_id, PDO::PARAM_INT);
-        $insertStmt->bindValue(':username', $username, PDO::PARAM_STR);
-        $insertStmt->bindValue(':comment_text', $comment_text, PDO::PARAM_STR);
-        $insertStmt->execute();
+            // Insert comment and username into the database
+            $insertQuery = "INSERT INTO comments (bounty_id, username, comment_text) VALUES (:bounty_id, :username, :comment_text)";
+            $insertStmt = $db->prepare($insertQuery);
+            $insertStmt->bindValue(':bounty_id', $bounty_id, PDO::PARAM_INT);
+            $insertStmt->bindValue(':username', $username, PDO::PARAM_STR);
+            $insertStmt->bindValue(':comment_text', $comment_text, PDO::PARAM_STR);
+            $insertStmt->execute();
+        }
     }
 
     // Fetching existing comments for the bounty
-    $commentsQuery = "SELECT username, comment_text, comment_date FROM comments WHERE bounty_id = :bounty_id ORDER BY comment_date DESC";
+    $commentsQuery = "SELECT comment_id, username, comment_text, comment_date FROM comments WHERE bounty_id = :bounty_id ORDER BY comment_date DESC";
     $commentsStmt = $db->prepare($commentsQuery);
     $commentsStmt->bindValue(':bounty_id', $bounty_id, PDO::PARAM_INT);
     $commentsStmt->execute();
@@ -110,12 +120,19 @@
             <h3>Comments</h3>
             <form method="POST" action="details.php?bounty_id=<?= $bounty_id ?>">
                 <div>
-                    <label for="username">Name</label>
-                    <input type="text" id="username" name="username" />
+                    <!-- <label for="username">Name</label> -->
+                    <input type="text" id="username" name="username" placeholder="Name" value="<?= htmlspecialchars($_POST['username'] ?? '') ?>" />
                 </div>
                 <div>
-                    <label for="comment_text">Comment</label>
-                    <textarea name="comment_text" rows="4" required></textarea>
+                    <!-- <label for="comment_text">Comment</label> -->
+                    <textarea name="comment_text" placeholder="Enter your comments or intel" rows="4" required><?= htmlspecialchars($_POST['comment_text'] ?? '') ?></textarea>
+                </div>
+                <div>
+                    <img src="captcha.php" alt="CAPTCHA" />
+                    <input type="text" name="captcha" placeholder="Enter CAPTCHA" required />
+                    <?php if (!empty($error)): ?>
+                        <div class="error"><?= htmlspecialchars($error) ?></div>
+                    <?php endif ?>
                 </div>
                 <button type="submit">Add Comment</button>
             </form>
@@ -125,6 +142,9 @@
                         <p class="intel-by">Intel by <strong><?= htmlspecialchars($comment['username']) ?></strong><p>
                         <p><?= htmlspecialchars($comment['comment_text']) ?></p>
                         <small>On <?= date("F d, Y, h:i a", strtotime($comment['comment_date'])) ?></small>
+                        <?php if ($_SESSION['is_admin'] === true): ?>
+                            <a href="moderate.php?comment_id=<?= $comment['comment_id'] ?>">Delete</a>
+                        <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
             </div>
