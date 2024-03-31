@@ -9,7 +9,12 @@
 ****************/
 
     session_start();
-    
+
+    if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
+        header('Location: signin.php');
+        exit;
+    }
+
     require('connect.php');
     // require('authenticate.php');
     include __DIR__ . '/php-image-resize-master/lib/ImageResize.php';
@@ -46,18 +51,28 @@
 
 
     // Delete bounty post if id is present in POST
-    if($_POST && isset($_POST['bounty_id'])) {
+    if($_POST && isset($_POST['bounty_id'], $_POST['action'])) {
         
         if($_POST['action'] == 'Delete'){
-            // Delete post
             $bounty_id = filter_input(INPUT_POST, 'bounty_id', FILTER_SANITIZE_NUMBER_INT);
+            // Delete comment
+            $del_comments_query = "DELETE FROM comments WHERE bounty_id = :bounty_id";
+            $del_comments_stmt = $db->prepare($del_comments_query);
+            $del_comments_stmt->bindValue(':bounty_id', $bounty_id, PDO::PARAM_INT);
+            $del_comments_stmt->execute();
+
+            // Delete post
+            
             $query = "DELETE FROM bounties WHERE bounty_id = :bounty_id";
             $statement = $db->prepare($query);
             $statement->bindValue(':bounty_id', $bounty_id, PDO::PARAM_INT);
-            $statement->execute();
-
-            header("Location: index.php");
-            exit;
+            
+            if ($statement->execute()) {
+                header("Location: index.php");
+                exit;
+            } else {
+                $error = "Error deleting bounty";
+            }   
         }
 
         $image_path = null;
