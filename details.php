@@ -21,7 +21,7 @@
     $bounty_id = filter_input(INPUT_GET, 'bounty_id', FILTER_SANITIZE_NUMBER_INT);
 
     if($bounty_id === false || $bounty_id === null) {
-        header("Location index.php");
+        header("Location content.php");
         exit;
     }
 
@@ -38,9 +38,9 @@
     // Fetch the row selected by primary key id
     $row = $statement->fetch();
 
-    // If no post is found, redirects to index.php
+    // If no post is found, redirects to content.php
     if($row === false) {
-        header("Location: index.php");
+        header("Location: content.php");
         exit;
     }
 
@@ -48,6 +48,12 @@
     // Handle comment submission
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['comment_text'])) {
         
+        if (isset($_GET['comment_submitted']) && $_GET['comment_submitted']) {
+            $comment_submitted = true;
+        } else {
+            $comment_submitted = false;
+        }
+
         if ($_POST['captcha'] !== $_SESSION['captcha']) {
             $error = "Incorrect CAPTCHA, please try again.";
         } else {
@@ -60,7 +66,11 @@
             $insertStmt->bindValue(':bounty_id', $bounty_id, PDO::PARAM_INT);
             $insertStmt->bindValue(':username', $username, PDO::PARAM_STR);
             $insertStmt->bindValue(':comment_text', $comment_text, PDO::PARAM_STR);
-            $insertStmt->execute();
+            
+            if ($insertStmt->execute()) {
+                header("Location: details.php?bounty_id=$bounty_id&comment_submitted=true");
+                exit;
+            }
         }
     }
 
@@ -98,45 +108,51 @@
     <div class="wrapper">
 
         <?php include('header.php'); ?>
-        <main id="bounties-details">
-            <h2><?= $row['title'] ?></h2>
-            <div class="date-stamp">
-                <small><?= date("F d, Y, h:i a", strtotime($row['bounty_date'])) . " - "?><a href="edit.php?bounty_id=<?= $row['bounty_id'] ?>">edit</a></small>
-            </div>
-            <div class="bounties-description">
-                <?php if (!empty($row['image_path'])): ?>
-                    <img src="<?= $row['image_path'] ?>" alt="<?= $row['title'] ?>">
-                <?php elseif (empty($row['image_path'])): ?>
-                    <div class="no-photo">No Photo</div>
+        <div class="details-wrapper">
+            <main id="bounties-details">
+                <h2><?= $row['title'] ?></h2>
+                <div class="date-stamp">
+                    <small><?= date("F d, Y, h:i a", strtotime($row['bounty_date'])) ?></small>
+                </div>
+                <?php if ($_SESSION['is_admin'] === true): ?>
+                    <a href="edit_bounty.php?bounty_id=<?= $row['bounty_id'] ?>">edit</a>
                 <?php endif ?>
-                <p><strong>Description:</strong> <?= $row['description'] ?></p>
-                <p><strong>Name:</strong> <?= $row['name'] ?></p>
-                <p><strong>Species:</strong> <?= $row['species'] ?></p>
-                <p><strong>Reward:</strong> <?= number_format($row['reward']) ?> <span class="special-font">$ </span></p>
-                <p><strong>Status:</strong> <?= $row['status'] ?></p>
+                <div class="bounties-description">
+                    <?php if (!empty($row['image_path'])): ?>
+                        <img src="<?= $row['image_path'] ?>" alt="<?= $row['title'] ?>">
+                    <?php elseif (empty($row['image_path'])): ?>
+                        <div class="no-photo">No Photo</div>
+                    <?php endif; ?>
+                    <p><strong>Description:</strong> <?= $row['description'] ?></p>
+                    <p><strong>Name:</strong> <?= $row['name'] ?></p>
+                    <p><strong>Species:</strong> <?= $row['species'] ?></p>
+                    <p><strong>Reward:</strong> <?= number_format($row['reward']) ?> <span class="special-font">$ </span></p>
+                    <p><strong>Status:</strong> <?= $row['status'] ?></p>
+                </div>
+            </main>
+            <div class="comments-section">
+                <h2>New Intel</h2>
+                <form method="POST" action="details.php?bounty_id=<?= $bounty_id ?>">
+                    <div>
+                        <!-- <label for="username">Name</label> -->
+                        <input type="text" id="username" name="username" placeholder="Name" value="<?= htmlspecialchars($_POST['username'] ?? '') ?>" />
+                    </div>
+                    <div>
+                        <!-- <label for="comment_text">Comment</label> -->
+                        <textarea name="comment_text" placeholder="Enter your comments or intel" rows="4" required><?= htmlspecialchars($_POST['comment_text'] ?? '') ?></textarea>
+                    </div>
+                    <div class="captcha">
+                        <img src="captcha.php" alt="CAPTCHA" />
+                        <input type="text" name="captcha" placeholder="Enter CAPTCHA" required />
+                        <?php if (!empty($error)): ?>
+                            <div class="error"><?= htmlspecialchars($error) ?></div>
+                        <?php endif ?>
+                    </div>
+                    <button type="submit">Add Comment</button>
+                </form>
             </div>
-        </main>
-        <div class="comments-section">
-            <h3>Comments</h3>
-            <form method="POST" action="details.php?bounty_id=<?= $bounty_id ?>">
-                <div>
-                    <!-- <label for="username">Name</label> -->
-                    <input type="text" id="username" name="username" placeholder="Name" value="<?= htmlspecialchars($_POST['username'] ?? '') ?>" />
-                </div>
-                <div>
-                    <!-- <label for="comment_text">Comment</label> -->
-                    <textarea name="comment_text" placeholder="Enter your comments or intel" rows="4" required><?= htmlspecialchars($_POST['comment_text'] ?? '') ?></textarea>
-                </div>
-                <div>
-                    <img src="captcha.php" alt="CAPTCHA" />
-                    <input type="text" name="captcha" placeholder="Enter CAPTCHA" required />
-                    <?php if (!empty($error)): ?>
-                        <div class="error"><?= htmlspecialchars($error) ?></div>
-                    <?php endif ?>
-                </div>
-                <button type="submit">Add Comment</button>
-            </form>
             <div class="comments-list">
+                <h2>Intels</h2>
                 <?php foreach ($comments as $comment): ?>
                     <div class="comment">
                         <p class="intel-by">Intel by <strong><?= htmlspecialchars($comment['username']) ?></strong><p>

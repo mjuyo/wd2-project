@@ -1,3 +1,3 @@
-<div id="footer">
-	<p>Hutt Year 2024 - Claim of the Cartel Codified</p>
+<div class="footer">
+	<p>© Hutt Year <?= date('Y') ?> - Claim of the Cartel Codified</p>
 </div>

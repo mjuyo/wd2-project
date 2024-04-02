@@ -25,6 +25,7 @@
             // Common session for all users
             $_SESSION['user_id'] = $users['user_id'];
             $_SESSION['username'] = $users['username'];
+            $_SESSION['full_name'] = $users['full_name'];
 
             // Check if the user is admin
             if (!empty($users['is_admin'])) {

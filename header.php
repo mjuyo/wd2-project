@@ -15,7 +15,7 @@
         <!-- Check if user is signed in and display appropriate link -->
         <?php if (isset($_SESSION['username'])): ?>
             <div class="user-welcome">
-                <span>Welcome, <?= htmlspecialchars($_SESSION['username']) ?></span>
+                <span>Welcome, <?= htmlspecialchars($_SESSION['full_name']) ?></span>
                     <label for="toggle">
                         <p>&#9776;</p>
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
@@ -42,6 +42,7 @@
 <div id="navbar">
     <ul id="menu">
         <li><a href="index.php" class="<?= is_active('index.php') ?>">Home</a></li>
-        <li><a href="bounty.php" class="<?= is_active('bounty.php') ?>">New Bounty</a></li>
+        <li><a href="content.php" class="<?= is_active('content.php') ?>">Bounties</a></li>
+        <li><a href="add_bounty.php" class="<?= is_active('bounty.php') ?>">New Bounty</a></li>
     </ul>
 </div>

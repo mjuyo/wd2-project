@@ -22,7 +22,7 @@
 
 	// Add the string to the image using a built-in font
 	// The 5 here refers to one of the built-in GD fonts that is included with PHP
-	imagestring($image, 5, 10, 8, $captchaString, $textColor);
+	imagestring($image, 5, 30, 10, $captchaString, $textColor);
 
 	// Output the image
 	header('Content-type: image/png');
