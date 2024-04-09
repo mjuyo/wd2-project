@@ -4,7 +4,7 @@
     
     Name: Marco Juyo
     Date: March 31st, 2024
-    Description: PHP Admin Dashboard
+    Description: PHP Add user
 
 ****************/
 

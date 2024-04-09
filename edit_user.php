@@ -77,7 +77,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;500&display=swap" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/aurebesh" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <title>Admin Dashboard</title>
+    <title>Edit User - Admin Dashboard</title>
 </head>
 <body>
     <div class="wrapper">

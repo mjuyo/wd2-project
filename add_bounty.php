@@ -49,6 +49,31 @@
         }
     }
 
+    // Fetch species table
+    function fetchSpecies($db) {
+        $query = "SELECT species_id, name FROM species";
+        $stmt = $db->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Fetch status table
+    function fetchStatus($db) {
+        $query = "SELECT status_id, name FROM status";
+        $stmt = $db->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Fetch difficulty table
+    function fetchDifficulty($db) {
+        $query = "SELECT difficulty_id, name FROM difficulty";
+        $stmt = $db->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
     // Post logic
 
     $image_path = null;
@@ -61,9 +86,11 @@
         $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $species = filter_input(INPUT_POST, 'species', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $reward = filter_input(INPUT_POST, 'reward', FILTER_SANITIZE_NUMBER_INT);
-        $status = filter_input(INPUT_POST, 'status', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $species_id = filter_input(INPUT_POST, 'species_id', FILTER_SANITIZE_NUMBER_INT);
+        $status_id = filter_input(INPUT_POST, 'status_id', FILTER_SANITIZE_NUMBER_INT);
+        $difficulty_id = filter_input(INPUT_POST, 'difficulty_id', FILTER_SANITIZE_NUMBER_INT);
+
 
         if (isset($_FILES['bounty_image']) && $_FILES['bounty_image']['error'] === 0) {
             $image_filename        = $_FILES['bounty_image']['name'];
@@ -92,17 +119,20 @@
                 $error = 'Title and content must have at least 1 character';
             } else {
                 // Build the parameterized SQL query and bind to the sanitized values
-                $query = "INSERT INTO bounties (title, description, name, species, reward, status, image_path) VALUES(:title, :description, :name, :species, :reward, :status, :image_path)";
+                $query = "INSERT INTO bounties (title, description, name, species_id, status_id, difficulty_id, reward, image_path) VALUES (:title, :description, :name, :species_id, :status_id, :difficulty_id, :reward, :image_path)";
+
                 $statement = $db->prepare($query);
 
-                // Bind values to the parameters
+                // Binding
                 $statement->bindValue(':title', $title);
                 $statement->bindValue(':description', $description);
                 $statement->bindValue(':name', $name);
-                $statement->bindValue(':species', $species);
+                $statement->bindValue(':species_id', $species_id, PDO::PARAM_INT);
+                $statement->bindValue(':status_id', $status_id, PDO::PARAM_INT);
+                $statement->bindValue(':difficulty_id', $difficulty_id, PDO::PARAM_INT);
                 $statement->bindValue(':reward', $reward, PDO::PARAM_INT);
-                $statement->bindValue(':status', $status);
-                $statement->bindValue(':image_path', $new_image_path);
+                $statement->bindValue(':image_path', $image_path);
+
 
                 // Execute the Post
                 if(!$statement->execute()){
@@ -155,9 +185,44 @@
                         <label for="name">Name</label>
                         <input type="text" id="name" name="name" value="<?= isset($_POST['name']) ? htmlspecialchars($_POST['name']) : '' ?>" />
                     </div>
-                    <div>
+<!--                     <div>
                         <label for="species">Species</label>
-                        <input type="text" id="species" name="species" value="<?= isset($_POST['species']) ? htmlspecialchars($_POST['species']) : '' ?>" />
+                        <input type="text" name="species" value="<?= isset($_POST['species']) ? htmlspecialchars($_POST['species']) : '' ?>">
+                    </div>
+ -->                    <div>
+                        <label for="species_id">Species</label>
+                        <select id="species_id" name="species_id">
+                            <option value="">Select a species</option>
+                            <?php foreach (fetchSpecies($db) as $specie): ?>
+                                <option value="<?= htmlspecialchars($specie['species_id']) ?>"><?= htmlspecialchars($specie['name']) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+<!--                     <div>
+                        <label for="status">Status</label>
+                        <select id="status" name="status">
+                            <option value="Open">Open</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                    </div>
+ -->                    <div>
+                        <label for="status_id">Status</label>
+                        <select id="status_id" name="status_id">
+                            <option value="">Select status</option>
+                            <?php foreach (fetchStatus($db) as $status): ?>
+                                <option value="<?= htmlspecialchars($status['status_id']) ?>"><?= htmlspecialchars($status['name']) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="difficulty_id">Difficulty</label>
+                        <select id="difficulty_id" name="difficulty_id">
+                            <option value="">Select difficulty</option>
+                            <?php foreach (fetchDifficulty($db) as $difficulty): ?>
+                                <option value="<?= htmlspecialchars($difficulty['difficulty_id']) ?>"><?= htmlspecialchars($difficulty['name']) ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     <div>
                         <label for="reward">Reward</label>
@@ -167,14 +232,7 @@
                         <label for="description">Description</label>
                         <textarea id="description" name="description" rows="4"><?= isset($_POST['description']) ? htmlspecialchars($_POST['description']) : '' ?></textarea>
                     </div>
-                    <div>
-                        <label for="status">Status</label>
-                        <select id="status" name="status">
-                            <option value="Open">Open</option>
-                            <option value="In Progress">In Progress</option>
-                            <option value="Completed">Completed</option>
-                        </select>
-                    </div>
+
                     <div>
                         <label for="bounty_image">Bounty Image: </label>
                         <input type="file" name="bounty_image" id="bounty_image" />

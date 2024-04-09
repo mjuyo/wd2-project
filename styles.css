@@ -13,8 +13,8 @@
 }
 
 body {
-/*    background-color: #1C1C1E;*/
-    background-color: #141414;
+    background: url('images/background_2.jpg') no-repeat center center fixed; 
+    background-size: cover;
     font-family: 'Poppins', sans-serif;
     color: #F2F2F7;
 }
@@ -45,23 +45,36 @@ a:hover {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 90vh;
+    height: 75vh;
     text-align: center;
-    background: url('images/background.jpg') no-repeat center center fixed; 
-    background-size: cover;
     color: #F2F2F7;
 }
 
 .landing .hero {
-    max-width: 800px;
+    background-color: rgba(211, 211, 211, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    padding: 30px;
+    margin: 0 auto;
+    width: 80%;
+    text-align: center;
+    align-items: center;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
 }
 
-.landing h1 {
+.hero h1 {
     font-weight: 500;
     margin-bottom: 20px;
+    color: #FFF;
 }
 
-.landing p {
+.hero h1:hover {
+    font-family: 'Poppins', sans-serif;
+    font-size: 24.5px;
+}
+
+.hero p {
     margin-bottom: 40px;
     font-size: 1.2rem;
 }
@@ -103,15 +116,18 @@ a:hover {
 /* Use media queries to ensure proper scaling on smaller devices */
 @media (max-width: 768px) {
     .landing {
-        height: auto;
         padding: 60px 20px;
     }
 
-    .landing h1 {
-        font-size: 2.5rem;
+    .hero h1 {
+        font-size: 21px;
     }
 
-    .landing p {
+    .hero h1:hover {
+    font-size: 17px;
+}
+
+    .hero p {
         font-size: 1rem;
     }
 }
@@ -120,16 +136,22 @@ a:hover {
 /* Disclaimer Styles */
 .disclaimer {
     color: #CCCCCC; /* Gray text for the disclaimer */
-    background-color: rgba(0, 0, 0, 0.8); /* Slight dark background for contrast */
-    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.4); /* Slight dark background for contrast */
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
     padding: 10px;
-    margin: 40px auto; /* Centering the disclaimer */
+    margin: 20px auto; /* Centering the disclaimer */
     width: 80%;
-    font-size: 0.9rem;
     text-align: center;
+    align-items: center;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
 }
 
-/* For smaller screens, you can adjust the width */
+.disclaimer p {
+    font-size: 12px !important;
+}
+
 @media (max-width: 768px) {
     .disclaimer {
         width: 95%;
@@ -290,6 +312,11 @@ a:hover {
         display: block;
 }
 
+.error {
+    color: #ff6b6b;
+    margin-bottom: 15px;
+}
+
 
 
 /* Sign In */
@@ -301,12 +328,57 @@ a:hover {
     padding: 20px;
 }
 
-.signin-wrapper {
+/*.signin-wrapper {
     width: 100%;
     max-width: 400px;
     margin: 80px auto;
     padding: 20px;
     box-sizing: border-box;
+    background-color: #202020;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px rgba(211, 211, 211, 0.5);
+}*/
+
+.signin-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    /*background: url('images/background_2.jpg') no-repeat center center fixed; 
+    background-size: cover;*/
+}
+
+.signin-wrapper {
+    width: 400px;
+    background-color: rgba(211, 211, 211, 0.1);
+/*  background-color: rgba(0, 0, 0, 0.1);*/
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    color: #FFF;
+    border-radius: 10px;
+    padding: 30px 40px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* For dark background */
+/*.signin-wrapper {
+    width: 400px;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(2px);
+    color: #FFF;
+    border-radius: 10px;
+    padding: 30px 40px;
+    box-shadow: 0px 0px 20px rgba(211, 211, 211, 0.2);
+}*/
+
+.back-and-img .back-button {
+    position: absolute;
+}
+
+.back-button i {
+    font-size: 30px;
 }
 
 .signin-img {
@@ -320,76 +392,69 @@ a:hover {
     margin-bottom: 30px;
 }
 
-.signin-container {
-    background-color: #202020;
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 20px rgba(211, 211, 211, 0.5);
-}
-
-.signin-container h2 {
-    color: #0A84FF;
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.signin-container form {
-    display: flex;
-    flex-direction: column;
-}
-
-.signin-container label {
-    font-weight: 500;
-    margin-bottom: 5px;
-}
-
-.signin-container input[type="text"],
-.signin-container input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    border-radius: 20px;
-    border: 1.5px solid #333;
-    background-color: #000;
-    color: #fff;
-    font-size: 18px;
-    margin-bottom: 20px;
+.signin-wrapper h2 {
     text-align: center;
 }
 
-.signin-container input[type="submit"] {
+.signin-error {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.signin-wrapper .input-box {
+    position: relative;
     width: 100%;
-    padding: 10px;
-    border-radius: 20px;
-    background-color: #0A84FF;
-    color: white;
-    font-size: 18px;    
+    height: 50px;
+    margin: 20px 0;
+}
+
+.input-box input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
     border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    outline: none;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 40px;
+    font-size: 16px;
+    color: #FFF;
+    padding: 20px 45px 20px 20px;
 }
 
-.signin-container input[type="submit"]:hover {
+.input-box input::placeholder {
+    color: #FFF;
+}
+
+.input-box i {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+}
+
+.signin-wrapper .signin-signup-btn {
+    width: 100%;
+    height: 45px;
+    background: #0A84FF;
+    border: none;
+    outline: none;
+    border-radius: 40px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    font-size: 18px;
+    color: #FFF;
+}
+
+.signin-signup-btn:hover {
     background-color: #0066CC;
 }
 
-.error {
-    color: #ff6b6b;
-    margin-bottom: 15px;
-}
-
-.signin-container p {
+.signin-wrapper .register-link {
     text-align: center;
-    margin-top: 20px;
+    margin: 20px 0 15px;
 }
 
-.signin-container a {
-    color: #0A84FF;
-    font-weight: 500;
-}
-
-.signin-container a:hover {
-    color: #FBE778;
-}
 
 
 /* Bounties */
@@ -496,8 +561,8 @@ a:hover {
 .no-photo {
     margin: 0px auto 15px;
     border-radius: 10px;
-    height: 250px;
-    width: 250px;
+    height: 238px;
+    width: 238px;
     background-color: darkgrey;
     color: whitesmoke;
     font-size: 30px;
@@ -679,20 +744,6 @@ fieldset > div {
 
 
 
-
-
-/* Footer */
-.footer {
-    background-color: #0A0A0A; 
-    color: #F2F2F7; 
-    text-align: center; 
-    padding: 40px 0; 
-    font-size: 18px; 
-    border-top: 2px solid #BE1E2D; 
-}
-
-
-
 /* Dashboard */
 .dashboard {
     background-color: #333;
@@ -782,4 +833,34 @@ th, td {
 td a, td form {
     margin-right: 10px;
     transition: color 0.2s;
+}
+
+
+/* Footer */
+.footer {
+    background-color: rgba(211, 211, 211, 0.1);
+    backdrop-filter: blur(10px);
+    border-top: 2px solid rgba(255, 255, 255, 0.1);
+    color: #FFF;
+    text-align: center; 
+    padding: 30px 0; 
+    font-size: 14px; 
+}
+
+
+/* Testing Upload button */
+.bounty-form input[type=file]::file-selector-button {
+  background-color: #a99a86; /* Change the background color to match your site */
+  background-position-x: 0%;
+  background-size: 30%; /* Adjust the background size to make it smaller */
+  border: 0;
+  border-radius: 8px;
+  color: #fff;
+  padding: 0.5rem 0.75rem; /* Adjust padding to make it smaller */
+  transition: all 0.25s;
+}
+ 
+input[type="file"]::-webkit-file-upload-button:hover {
+  background-color: #856d52; /* Change the background color to match your site */
+  background-position-x: 100%;
 }

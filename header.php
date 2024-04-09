@@ -1,4 +1,6 @@
 <div class="header">
+
+    <!-- Logo -->
     <div class="logo">
         <a href="index.php">
             <img src="images/hutt_logo.png" >
@@ -8,9 +10,24 @@
             </div>
         </a>
     </div>
-    <div class="search-bar">
-        <input type="search" placeholder="Search...">
-    </div>
+    
+    <!-- Search bar-->
+    <form action="search_results.php" method="GET">
+        <div class="search-bar">
+            <input type="search" name="query" placeholder="Search...">
+            <?php if (isset($_GET['species_id'])): ?>
+                <input type="hidden" name="species_id" value="<?= htmlspecialchars($_GET['species_id']) ?>">
+            <?php endif; ?>
+            <?php if (isset($_GET['status_id'])): ?>
+                <input type="hidden" name="status_id" value="<?= htmlspecialchars($_GET['status_id']) ?>">
+            <?php endif; ?>
+            <?php if (isset($_GET['difficulty_id'])): ?>
+                <input type="hidden" name="difficulty_id" value="<?= htmlspecialchars($_GET['difficulty_id']) ?>">
+            <?php endif; ?>
+        </div>
+    </form>
+
+    <!-- User login info -->
     <div class="auth-links">
         <!-- Check if user is signed in and display appropriate link -->
         <?php if (isset($_SESSION['username'])): ?>

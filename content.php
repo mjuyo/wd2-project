@@ -17,6 +17,78 @@
 
     require('connect.php');
 
+
+    // Fetch species, status, and difficulty for filters
+    $speciesStmt = $db->query("SELECT species_id, name FROM species");
+    $speciesList = $speciesStmt->fetchAll();
+
+    $statusStmt = $db->query("SELECT status_id, name FROM status");
+    $statusList = $statusStmt->fetchAll();
+
+    $difficultyStmt = $db->query("SELECT difficulty_id, name FROM difficulty");
+    $difficultyList = $difficultyStmt->fetchAll();
+
+    // Build query
+    $query = "
+            SELECT b.*, 
+                sp.name AS species_name,
+                st.name AS status_name,
+                df.name AS difficulty_name
+            FROM bounties b 
+            LEFT JOIN species sp ON b.species_id = sp.species_id
+            LEFT JOIN status st ON b.status_id = st.status_id
+            LEFT JOIN difficulty df ON b.difficulty_id = df.difficulty_id";
+
+    // Build the WHERE clause based on filters
+    $whereClauses = [];
+    $bindings = [];
+
+    if (!empty($_GET['species_id'])) {
+        $whereClauses[] = 'b.species_id = :species_id';
+        $bindings[':species_id'] = $_GET['species_id'];
+    }
+
+    if (!empty($_GET['status_id'])) {
+        $whereClauses[] = 'b.status_id = :status_id';
+        $bindings[':status_id'] = $_GET['status_id'];
+    }
+
+    if (!empty($_GET['difficulty_id'])) {
+        $whereClauses[] = 'b.difficulty_id = :difficulty_id';
+        $bindings[':difficulty_id'] = $_GET['difficulty_id'];
+    }
+
+    // Search query
+    // $searchQuery = $_GET['query'] ?? '';
+
+    // if (!empty($searchQuery)) {
+    //     $whereClauses[] = "(b.title LIKE :searchQuery OR b.name LIKE :searchQuery OR sp.name LIKE :searchQuery)";
+    //     $bindings[':searchQuery'] = '%' . $searchQuery . '%';
+    // }
+
+    if (!empty($whereClauses)) {
+        $query .= ' WHERE ' . implode(' AND ', $whereClauses);
+    }
+
+    // Count query
+    $countQuery = "SELECT COUNT(*) AS total_count
+                   FROM bounties b 
+                   LEFT JOIN species sp ON b.species_id = sp.species_id
+                   LEFT JOIN status st ON b.status_id = st.status_id
+                   LEFT JOIN difficulty df ON b.difficulty_id = df.difficulty_id";
+
+    if (!empty($whereClauses)) {
+        $countQuery .= ' WHERE ' . implode(' AND ', $whereClauses);
+    }
+
+    $countStmt = $db->prepare($countQuery);
+    foreach ($bindings as $key => $value) {
+        $countStmt->bindValue($key, $value);
+    }
+    $countStmt->execute();
+    $countResult = $countStmt->fetch();
+    $totalCount = $countResult['total_count'];
+
     // Sorting
     $sort_column = 'bounty_date';
     $sort_order = 'DESC';
@@ -67,9 +139,16 @@
 
 
     // Query from the database
-    $query = "SELECT * FROM bounties ORDER BY $sort_column $sort_order";
+    // ORDER BY
+    $query .= " ORDER BY $sort_column $sort_order";
+
+
     $statement = $db->prepare($query);
+    foreach ($bindings as $key => $value) {
+        $statement->bindValue($key, $value);
+    }
     $statement->execute();
+
 
     // Active tab
     function is_active($link) {
@@ -88,7 +167,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;500&display=swap" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/aurebesh" rel="stylesheet">
-                
     <link rel="stylesheet" href="styles.css">
     <title>GBN</title>
 </head>
@@ -97,10 +175,37 @@
         <?php include('header.php'); ?>
         <main id="all-bounties">
             
+            <!-- Categories -->
+            <form action="content.php" method="GET">
+                <select name="species_id" onchange="this.form.submit()">
+                    <option value="">Select Species</option>
+                    <?php foreach ($speciesList as $species): ?>
+                        <option value="<?= $species['species_id'] ?>" <?= (isset($_GET['species_id']) && $_GET['species_id'] == $species['species_id']) ? 'selected' : '' ?>><?= htmlspecialchars($species['name']) ?></option>
+                    <?php endforeach; ?>
+                </select>
+
+                <select name="status_id" onchange="this.form.submit()">
+                    <option value="">Select Status</option>
+                    <?php foreach ($statusList as $status): ?>
+                        <option value="<?= $status['status_id'] ?>" <?= (isset($_GET['status_id']) && $_GET['status_id'] == $status['status_id']) ? 'selected' : '' ?>><?= htmlspecialchars($status['name']) ?></option>
+                    <?php endforeach; ?>
+                </select>
+
+                <select name="difficulty_id" onchange="this.form.submit()">
+                    <option value="">Select Difficulty</option>
+                    <?php foreach ($difficultyList as $difficulty): ?>
+                        <option value="<?= $difficulty['difficulty_id'] ?>" <?= (isset($_GET['difficulty_id']) && $_GET['difficulty_id'] == $difficulty['difficulty_id']) ? 'selected' : '' ?>><?= htmlspecialchars($difficulty['name']) ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </form>
+            <div>
+                Total Results: <?= htmlspecialchars($totalCount) ?>
+            </div>
+
+
+            <!-- Sorting -->
             <div class="sorting-wrapper">
                 <div class="sorted-select">
-                    
-
                     <?php if (isset($_SESSION['username'])) : ?>
                         <form method="GET" action="">
                             <select name="sort" onchange="this.form.submit()">
@@ -122,6 +227,7 @@
 
             </div>
 
+            <!-- All content -->
             <section class="bounties-grid">
                 <?php while($row = $statement->fetch()): ?>
                     <div class="bounties-post">
@@ -140,9 +246,10 @@
                             <?php endif ?>
                             <p><strong>Description:</strong> <?= $row['description'] ?></p>
                             <p><strong>Name:</strong> <?= $row['name'] ?></p>
-                            <p><strong>Species:</strong> <?= $row['species'] ?></p>
+                            <p><strong>Species:</strong> <?= $row['species_name'] ?></p>
+                            <p><strong>Difficulty:</strong> <?= $row['difficulty_name'] ?></p>
                             <p><strong>Reward:</strong> <?= number_format($row['reward']) ?> <span class="special-font">$ </span></p>
-                            <p><strong>Status:</strong> <?= $row['status'] ?></p>
+                            <p><strong>Status:</strong> <?= $row['status_name'] ?></p>
                         </div>
                     </div>
                 <?php endwhile ?>

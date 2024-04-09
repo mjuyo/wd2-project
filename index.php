@@ -41,18 +41,20 @@
     <div class="wrapper">
         <?php include('header.php'); ?>
         
-        <main class="landing">
-            <section class="hero">
-                <h1>Welcome to the Galactic Bounties Network</h1>
+        <div class="landing">
+            <div class="hero">
+                <h1 class="special-font">Welcome</h1>
+                <h1 class="special-font">Galactic Bounties Network</h1>
+
                 <p>The ultimate hub for intergalactic bounty hunters to find, track, and capture the most sought-after targets in the galaxy.</p>
                 <a href="signup.php" class="btn btn-primary">Join the Hunt</a>
-            </section>
+            </div>
 
             <!-- Disclaimer Section -->
-            <section class="disclaimer">
+            <div class="disclaimer">
                 <p>Disclaimer: We are not associated with the Galactic Empire but are open to receiving bounties from them as well.</p>
-            </section>
-        </main>
+            </div>
+        </div>
 
         <?php include('footer.php'); ?>
     </div>

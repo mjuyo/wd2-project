@@ -30,6 +30,12 @@
     $bounty_stmt->execute();
     $bounties = $bounty_stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    // Fetch Species
+    $species_query = "SELECT species_id, name, homeworld FROM species";
+    $species_stmt = $db->prepare($species_query);
+    $species_stmt->execute();
+    $species = $species_stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
     function is_active($link) {
         // Get the current page file name
@@ -127,6 +133,38 @@
 	                            <td>
 	                                <a href="edit_user.php?user_id=<?= $user['user_id'] ?>">Edit</a> |
 	                                <a href="delete_user.php?user_id=<?= $user['user_id'] ?>">Delete</a>
+	                            </td>
+	                        </tr>
+	                        <?php endforeach; ?>
+	                    </tbody>
+	                </table>
+	            </div>
+
+
+	            <!-- Categories Section -->
+	            <div class="dashboard-section">
+	                <div class="dashboard-title">
+		                <h2>Categories</h2>
+		                <a href="add_species.php" class="button">+ Add Species</a>
+	                </div>
+	                <!-- Species Table -->
+	                <table>
+	                    <!-- Table Headers -->
+	                    <thead>
+	                        <tr>
+	                        	<th>Species</th>
+	                            <th>Planet</th>
+	                            <th>Actions</th>
+	                        </tr>
+	                    </thead>
+	                    <!-- Table Body -->
+	                    <tbody>
+	                        <?php foreach ($species as $species): ?>
+	                        <tr>
+	                        	<td><?= htmlspecialchars($species['name']) ?></td>
+	                        	<td><?= htmlspecialchars($species['homeworld']) ?></td>
+	                            <td>
+	                                <a href="edit_species.php?species_id=<?= $species['species_id'] ?>">Edit</a>
 	                            </td>
 	                        </tr>
 	                        <?php endforeach; ?>

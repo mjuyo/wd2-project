@@ -38,7 +38,7 @@
             exit();
             
         } else {
-            $signin_error = "Your username or password was incorrect.";
+            $signin_error = "Incorrect username or password.";
         }
     }
 
@@ -53,6 +53,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;500&display=swap" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/aurebesh" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="styles.css">
     <title>User Sign In</title>
 </head>
@@ -66,39 +67,41 @@
             </div>
         </a>
     </div>
+    
+    <div class="signin-container">
+        <div class="signin-wrapper">
+            <form action="signin.php" method="POST">
+                <div class="signin-img">
+                    <img src="images/hutt_logo.png" >
+                </div>
 
-    <div class="signin-wrapper">
-        <div class="signin-container">
-            <div class="signin-img">
-                <img src="images/hutt_logo.png" >
-            </div>
-            <div>
                 <h2>Sign in</h2>
-                <?php if (!empty($signin_error)): ?>
-                    <p class="error"><?= $signin_error ?></p>
-                <?php endif; ?>
-                
 
-                <form action="signin.php" method="POST">
-                    <input type="hidden" name="signin">
-                    <div>
-                        <!-- <label for="username">Username:</label> -->
-                        <input type="text" id="username" name="username" placeholder="Username" required>
-                    </div>
-                    <div>
-                        <!-- <label for="password">Password:</label> -->
-                        <input type="password" id="password" name="password" placeholder="Password" required>
-                    </div>
-                    <div>
-                        <input type="submit" value="Sign In">
-                    </div>
-                </form>
-            </div>
-            <div>
-                <p>No account? <a href="signup.php">Create yours now.</a></p>
-            </div>
+                <?php if (!empty($signin_error)): ?>
+                    <p class="error signin-error"><?= $signin_error ?></p>
+                <?php endif; ?>
+
+                <input type="hidden" name="signin">
+
+                <div class="input-box">
+                    <input type="text" id="username" name="username" placeholder="Username" required>
+                    <i class="bi bi-person-circle"></i>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="password" name="password" placeholder="Password" required>
+                    <i class="bi bi-lock-fill"></i>
+                </div>
+
+                <button type="submit" class="signin-signup-btn">Sign In</button>
+
+                <div class="register-link">
+                    <p>No account? <a href="signup.php">Create yours now.</a></p>
+                </div>
+            </form>
         </div>
     </div>
     <?php include('footer.php'); ?>
 </body>
 </html>
+
+
