@@ -35,7 +35,7 @@
             } else {
                 $hash_password = password_hash($password, PASSWORD_DEFAULT);
 
-                $statement = $db->prepare("INSERT INTO users (full_name, username, password) VALUES (?, ?)");
+                $statement = $db->prepare("INSERT INTO users (full_name, username, password) VALUES (?, ?, ?)");
                 $success = $statement->execute([$full_name, $username, $hash_password]);
 
                 if ($success) {
@@ -49,6 +49,12 @@
 
         }
     }
+
+    function is_active($link) {
+        // Get the current page file name
+        $current_page = basename($_SERVER['PHP_SELF']); 
+        return $link == $current_page ? 'active' : '';
+    }   
 
 ?>
 
