@@ -77,23 +77,51 @@
     // Delete bounty post if id is present in POST
     if($_POST && isset($_POST['bounty_id'], $_POST['action'])) {
 
+        $bounty_id = filter_input(INPUT_POST, 'bounty_id', FILTER_SANITIZE_NUMBER_INT);
+
+        // Check if there is a request to delete the image
+        $removeImage = isset($_POST['remove_image']);
+        if ($removeImage && $bounty_id) {
+            // Get the current image filename from the database
+            $queryGetImage = "SELECT image_path FROM bounties WHERE bounty_id = :bounty_id";
+            $statementGetImage = $db->prepare($queryGetImage);
+            $statementGetImage->bindValue(':bounty_id', $bounty_id, PDO::PARAM_INT);
+            $statementGetImage->execute();
+            $row = $statementGetImage->fetch(PDO::FETCH_ASSOC);
+            $currentImage = $row['image_path'];
+
+            // Delete the image file from the file system
+            if (!empty($currentImage)) {
+                $imagePath = $currentImage;
+                if (file_exists($imagePath)) {
+                    unlink($imagePath); // Remove the image file
+                }
+            }
+
+            // Update the database to remove the image path
+            $queryRemoveImage = "UPDATE bounties SET image_path = NULL WHERE bounty_id = :bounty_id";
+            $statementRemoveImage = $db->prepare($queryRemoveImage);
+            $statementRemoveImage->bindValue(':bounty_id', $bounty_id, PDO::PARAM_INT);
+            $statementRemoveImage->execute();
+        }
+
+
         $image_path = null;
         $error = '';
         $image_filename = '';
         $new_image_path = '';
 
         // Edit blog post if title, content and id are present in POST
-        if($_POST && isset($_POST['title']) && isset($_POST['description']) && isset($_POST['bounty_id'])) {
+        if($_POST && isset($_POST['title']) && isset($_POST['description'])) {
             // Sanitize user input to escape HTML entities and filter out dangerous characters
-            $bounty_id = filter_input(INPUT_POST, 'bounty_id', FILTER_SANITIZE_NUMBER_INT);
             $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $reward = filter_input(INPUT_POST, 'reward', FILTER_SANITIZE_NUMBER_INT);
             $species_id = filter_input(INPUT_POST, 'species_id', FILTER_SANITIZE_NUMBER_INT);
             $status_id = filter_input(INPUT_POST, 'status_id', FILTER_SANITIZE_NUMBER_INT);
             $difficulty_id = filter_input(INPUT_POST, 'difficulty_id', FILTER_SANITIZE_NUMBER_INT);
-
+            // $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $description = $_POST['description']; // Sanitation modified to use WYSIWYG
 
             $image_upload_detected = isset($_FILES['bounty_image']) && ($_FILES['bounty_image']['error'] === 0);
 
@@ -160,7 +188,7 @@
     }
 
     if (isset($_GET['bounty_id'])) {
-        // Retrieve blog to be edited, if id GET parameter is in URL
+        // Retrieve to be edited, if id GET parameter is in URL
         // Sanitize the id. Like above but this time from INPUT_GET
         $bounty_id = filter_input(INPUT_GET, 'bounty_id', FILTER_SANITIZE_NUMBER_INT);
         
@@ -204,10 +232,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tiny.cloud/1/hbxpe7vn0nqmviarr6ittv43ay4nx0lsa3y9jvroi479oyh7/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;500&display=swap" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/aurebesh" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="styles.css">
     <title>GBN</title>
 </head>
@@ -276,7 +306,15 @@
                             <label for="bounty_image">Bounty Image</label>
                             <input type="file" id="bounty_image" name="bounty_image" />
                         </div>
-
+                        
+                        <!-- Remove image checkbox-->
+                        <?php if (!empty($bounties['image_path'])): ?>
+                            <div>
+                                <label for="remove_image">Remove Image</label>
+                                <input type="checkbox" id="remove_image" name="remove_image">
+                            </div>
+                        <?php endif; ?>
+                        <!-- Remove image checkbox-->
 
                         <div class="button-edit">
                             <input type="submit" name="action" value="Update">
@@ -294,5 +332,12 @@
         </div>
         <?php include('footer.php'); ?>
     </div>
+
+    <!-- WYSIWYG script-->
+    <script>
+          tinymce.init({
+            selector: '#description'
+          });
+    </script>
 </body>
 </html>

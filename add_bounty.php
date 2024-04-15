@@ -84,7 +84,8 @@
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['title']) && isset($_POST['description'])) {
         // Sanitize user input
         $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        // $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $description = $_POST['description']; // Sanitation modified to use WYSIWYG
         $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $reward = filter_input(INPUT_POST, 'reward', FILTER_SANITIZE_NUMBER_INT);
         $species_id = filter_input(INPUT_POST, 'species_id', FILTER_SANITIZE_NUMBER_INT);
@@ -159,10 +160,12 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.tiny.cloud/1/hbxpe7vn0nqmviarr6ittv43ay4nx0lsa3y9jvroi479oyh7/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;500&display=swap" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/aurebesh" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="styles.css">
     <title>GBN</title>
 </head>
@@ -245,6 +248,13 @@
         </div>
         <?php include('footer.php'); ?>
     </div>
+    
+    <!-- WYSIWYG script-->
+    <script>
+          tinymce.init({
+            selector: '#description'
+          });
+    </script>
 
 </body>
 </html>

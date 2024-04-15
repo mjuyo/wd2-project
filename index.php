@@ -34,6 +34,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;500&display=swap" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/aurebesh" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="styles.css">
     <title>GBN</title>
 </head>
@@ -47,7 +48,11 @@
                 <h1 class="special-font">Galactic Bounties Network</h1>
 
                 <p>The ultimate hub for intergalactic bounty hunters to find, track, and capture the most sought-after targets in the galaxy.</p>
-                <a href="signup.php" class="btn btn-primary">Join the Hunt</a>
+                <div class="landing-btns">
+                    <a href="content.php" class="btn btn-primary">View Bounties</a>
+                    <p>- OR -</p>                
+                    <a href="signup.php" class="btn btn-primary">Join the Hunt</a>
+                </div>
             </div>
 
             <!-- Disclaimer Section -->

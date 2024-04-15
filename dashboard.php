@@ -25,7 +25,7 @@
 
 
     // Fetch bounties
-    $bounty_query = "SELECT bounty_id, title, name, reward, status, bounty_date FROM bounties ORDER BY bounty_date DESC";
+    $bounty_query = "SELECT bounty_id, title, name, reward, bounty_date FROM bounties ORDER BY bounty_date DESC";
     $bounty_stmt = $db->prepare($bounty_query);
     $bounty_stmt->execute();
     $bounties = $bounty_stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -53,6 +53,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;500&display=swap" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/aurebesh" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="styles.css">
 	<title>Admin Dashboard</title>
 </head>
@@ -76,7 +77,6 @@
 	                        <tr>
 	                            <th>Name</th>
 	                            <th>Reward</th>
-	                            <th>Status</th>
 	                            <th>Date</th>
 	                            <th>Actions</th>
 	                        </tr>
@@ -87,7 +87,6 @@
 	                        <tr>
 	                            <td><?= htmlspecialchars($bounty['name']) ?></td>
 	                            <td><?= number_format($bounty['reward']) ?> <span class="special-font">$ </span></td>
-	                            <td><?= $bounty['status']?></td>
 	                            <td><?= date("F d, Y, H:i", strtotime($bounty['bounty_date'])) ?></td>
 	                            <td>
 	                                <a href="edit_bounty.php?bounty_id=<?= $bounty['bounty_id'] ?>">Edit</a> |
