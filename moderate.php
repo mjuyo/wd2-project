@@ -9,6 +9,7 @@
 
     if (isset($_GET['comment_id'])) {
         $comment_id = filter_input(INPUT_GET, 'comment_id', FILTER_SANITIZE_NUMBER_INT);
+        $bounty_id = filter_input(INPUT_GET, 'bounty_id', FILTER_SANITIZE_NUMBER_INT);
 
         $query = "DELETE FROM comments WHERE comment_id = :comment_id";
         $statement = $db->prepare($query);
@@ -16,7 +17,7 @@
         
         if ($statement->execute()) {
             // Redirect back to the comments page
-            header("Location: details.php?bounty_id=" . $bountyId); 
+            header("Location: details.php?bounty_id=" . $bounty_id); 
             exit;
         }        
     }

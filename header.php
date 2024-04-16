@@ -16,9 +16,9 @@
 
         
         <!-- Search bar-->
-        <form action="search_results.php" method="GET">
+        <form action="content.php" method="GET">
             <div class="search-bar">
-                <input type="search" name="query" placeholder="Search...">
+                <input type="search" name="query" placeholder="Search by name, title or species...">
                 <?php if (isset($_GET['species_id'])): ?>
                     <input type="hidden" name="species_id" value="<?= htmlspecialchars($_GET['species_id']) ?>">
                 <?php endif; ?>

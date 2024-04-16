@@ -90,12 +90,12 @@
     }
 
     // Search query
-    // $searchQuery = $_GET['query'] ?? '';
+    $searchQuery = $_GET['query'] ?? '';
 
-    // if (!empty($searchQuery)) {
-    //     $whereClauses[] = "(b.title LIKE :searchQuery OR b.name LIKE :searchQuery OR sp.name LIKE :searchQuery)";
-    //     $bindings[':searchQuery'] = '%' . $searchQuery . '%';
-    // }
+    if (!empty($searchQuery)) {
+        $whereClauses[] = "(b.title LIKE :searchQuery OR b.name LIKE :searchQuery OR sp.name LIKE :searchQuery)";
+        $bindings[':searchQuery'] = '%' . $searchQuery . '%';
+    }
 
     if (!empty($whereClauses)) {
         $query .= ' WHERE ' . implode(' AND ', $whereClauses);
@@ -252,6 +252,7 @@
                             <option value="<?= $difficulty['difficulty_id'] ?>" <?= (isset($_GET['difficulty_id']) && $_GET['difficulty_id'] == $difficulty['difficulty_id']) ? 'selected' : '' ?>><?= htmlspecialchars($difficulty['name']) ?></option>
                         <?php endforeach; ?>
                     </select>
+                    <!-- <input type="hidden" name="query" value="<?= $searchQuery?> "> -->
                 </form>
 
                 <!-- Add new bounty -->
@@ -261,9 +262,9 @@
                     <?php endif; ?>
                 </div>                        
             </div>
-<!--             <div class="count-results">
+            <div class="count-results">
                 Total Results: <?= htmlspecialchars($totalCount) ?>
-            </div> -->
+            </div>
 
             <!-- All content -->
             <section class="bounties-grid">
@@ -276,7 +277,7 @@
                                 <div class="no-photo">No Photo</div>
                             <?php endif ?>
                             <?php if ($_SESSION['is_admin'] === true): ?>
-                                <div class="bounty-edit-link">
+                                <div class="bounty-edit-content">
                                     <a href="edit_bounty.php?bounty_id=<?= $row['bounty_id'] ?>">edit</a>
                                 </div>
                             <?php endif ?>

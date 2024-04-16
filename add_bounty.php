@@ -172,28 +172,21 @@
 <body>
     <div class="wrapper">
         <?php include('header.php'); ?>
-        <div id="bounties-form-wrapper">
-            <?php if(!empty($error)): ?>
-                <p class="error"><?= $error ?></p>
-            <?php endif ?>
-            <form method="post" action="add_bounty.php" class="bounty-form" enctype="multipart/form-data">
-                <fieldset>
-                    <!-- <legend>New Bounty</legend> -->
+        <div class="bounties-container">
+            <div class="bounties-form-wrapper">
+                <?php if(!empty($error)): ?>
+                    <p class="error"><?= $error ?></p>
+                <?php endif ?>
+                <form method="post" action="add_bounty.php" class="bounty-form" enctype="multipart/form-data">
+                    <legend>New Bounty</legend>
                     <div>
-                        <label for="title">Title</label>
-                        <input type="text" id="title" name="title" value="<?= isset($_POST['title']) ? htmlspecialchars($_POST['title']) : '' ?>" />
+                        <input type="text" id="title" name="title" value="<?= isset($_POST['title']) ? htmlspecialchars($_POST['title']) : '' ?>" placeholder="Title" />
                     </div>
                     
                     <div>
-                        <label for="name">Name</label>
-                        <input type="text" id="name" name="name" value="<?= isset($_POST['name']) ? htmlspecialchars($_POST['name']) : '' ?>" />
+                        <input type="text" id="name" name="name" value="<?= isset($_POST['name']) ? htmlspecialchars($_POST['name']) : '' ?>" placeholder="Name" />
                     </div>
-<!--                     <div>
-                        <label for="species">Species</label>
-                        <input type="text" name="species" value="<?= isset($_POST['species']) ? htmlspecialchars($_POST['species']) : '' ?>">
-                    </div>
- -->                    <div>
-                        <label for="species_id">Species</label>
+                    <div>
                         <select id="species_id" name="species_id">
                             <option value="">Select a species</option>
                             <?php foreach (fetchSpecies($db) as $specie): ?>
@@ -201,16 +194,7 @@
                             <?php endforeach; ?>
                         </select>
                     </div>
-<!--                     <div>
-                        <label for="status">Status</label>
-                        <select id="status" name="status">
-                            <option value="Open">Open</option>
-                            <option value="In Progress">In Progress</option>
-                            <option value="Completed">Completed</option>
-                        </select>
-                    </div>
- -->                    <div>
-                        <label for="status_id">Status</label>
+                    <div>
                         <select id="status_id" name="status_id">
                             <option value="">Select status</option>
                             <?php foreach (fetchStatus($db) as $status): ?>
@@ -219,7 +203,6 @@
                         </select>
                     </div>
                     <div>
-                        <label for="difficulty_id">Difficulty</label>
                         <select id="difficulty_id" name="difficulty_id">
                             <option value="">Select difficulty</option>
                             <?php foreach (fetchDifficulty($db) as $difficulty): ?>
@@ -228,23 +211,22 @@
                         </select>
                     </div>
                     <div>
-                        <label for="reward">Reward</label>
-                        <input type="number" id="reward" name="reward" value="<?= isset($_POST['reward']) ? htmlspecialchars($_POST['reward']) : '' ?>" />
+                        <input type="number" id="reward" name="reward" value="<?= isset($_POST['reward']) ? htmlspecialchars($_POST['reward']) : '' ?>" placeholder="Reward" />
                     </div>
                     <div>
                         <label for="description">Description</label>
-                        <textarea id="description" name="description" rows="4"><?= isset($_POST['description']) ? htmlspecialchars($_POST['description']) : '' ?></textarea>
+                        <textarea id="description" name="description" rows="2"><?= isset($_POST['description']) ? htmlspecialchars($_POST['description']) : '' ?></textarea>
                     </div>
 
                     <div>
-                        <label for="bounty_image">Bounty Image: </label>
+                        <label for="bounty_image">Bounty Image</label>
                         <input type="file" name="bounty_image" id="bounty_image" />
                     </div>
                     <div class="button-post">
                         <input type="submit" name="command" value="Post" />
                     </div>
-                </fieldset>
-            </form>
+                </form>
+            </div>
         </div>
         <?php include('footer.php'); ?>
     </div>

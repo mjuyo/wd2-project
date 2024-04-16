@@ -239,7 +239,7 @@ a:hover {
 }
 
 .search-bar input {
-    width: 100%;
+    width: 140%;
     height: 100%;
     background: transparent;
     border: none;
@@ -248,7 +248,7 @@ a:hover {
     border-radius: 40px;
     font-size: 16px;
     color: #FFF;
-    padding: 20px 45px 20px 20px;
+    padding: 20px 30px 20px 20px;
 }
 
 .search-bar input::placeholder {
@@ -257,7 +257,7 @@ a:hover {
 
 .search-bar i {
     position: absolute;
-    right: 20px;
+    right: -70px;
     top: 50%;
     transform: translateY(-50%);
     font-size: 20px;
@@ -517,6 +517,13 @@ a:hover {
 }
 
 
+/* Results count */
+.count-results{
+    margin: 0 30px;
+    padding-top: 10px;
+}
+
+
 /* Bounties */
 #all-bounties {
     padding: 10px 20px;
@@ -560,18 +567,16 @@ a:hover {
     position: relative;
 }
 
-.bounties-photo .bounty-edit-link {
+.bounties-photo .bounty-edit-content {
     position: absolute;
     top: -10px;
     right: -5px;
-        background-color: transparent;
+    background-color: transparent;
     border: 2px solid rgba(255, 255, 255, 0.1);
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     border-radius: 20px;
     padding: 0 10px;
-
-
 }
 
 .bounties-header {
@@ -606,33 +611,35 @@ a:hover {
 
 
 /* Details */
-
 .details-wrapper {
     display: flex;
-    margin: 20px 40px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 70px auto;
 }
 
-#bounties-details {
+.bounties-details {
     background-color: rgba(211, 211, 211, 0.1);
     border: 2px solid rgba(255, 255, 255, 0.1);
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
-
-    border-radius: 10px;
-    padding: 20px 40px;
-    margin: 10px auto;
-    color: #FFF;
-    width: 30%;
+    border-radius: 20px;
+    min-width: 400px;
+    max-width: 600px;
+    padding: 20px;
+    margin: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    color: #FFF;
     overflow: hidden;
     text-align: center;
 }
 
-#bounties-details h2 {
+.bounties-details h2 {
     margin: 0 auto;
+    color: #FBE778;
 }
 
-#bounties-details .date-stamp {
+.bounties-details .date-stamp {
     font-size: 0.9em;
     margin-bottom: 15px;
     font-weight: lighter;
@@ -652,77 +659,134 @@ a:hover {
 
 
 /* Comments Section */
-.comments-section {
-    background-color: #252525;
+.new-comments {
+    height: 100%;
+    background-color: rgba(211, 211, 211, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
     padding: 20px;
-    margin: 20px auto;
-    border-radius: 10px;
-    color: #F2F2F7;
-    width: 30%;
+    margin: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    color: #FFF;
+    overflow: hidden;
 }
 
-.comments-section h2 {
+.new-comments legend {
     margin-bottom: 15px;
     color: #0A84FF;
+    font-size: 22px;
 }
 
-.comments-section form {
-    margin-bottom: 20px;
-}
 
-.comments-section input[type="text"],
-.comments-section textarea {
+.new-comments input[type="text"],
+.new-comments textarea {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
+    height: 100%;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    padding: 5px;
+    margin-bottom: 10px;
     border-radius: 20px;
-    border: 1.5px solid #333;
-    background-color: #000;
     color: #FFF;
-    font-size: 18px;
+    font-size: 16px;
     text-align: center;
 }
 
-.comments-section button {
-    width: 50%;
-    padding: 10px;
+.new-comments input::placeholder {
+    color: #FFF;
+}
+
+.new-comments textarea::placeholder {
+    color: #FFF;
+}
+
+
+
+
+
+
+
+.captcha {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.captcha-img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.captcha-input {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+.captcha-input input {
+
+}
+
+.captcha .button-comment {
+    align-content: center;
+}
+
+.captcha button {
+    width: 100px;
+    padding: 5px 10px;
+    margin: 10px;
     background-color: #0A84FF;
-    color: white;
+    color: #FFF;
     font-size: 18px;
     border: none;
-    border-radius: 20px;
+    border-radius: 40px;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
-.comments-section button:hover {
+.captcha button:hover {
     background-color: #0066CC;
-}
-
-.captcha {
-    display: grid;
-    text-align: center;
-}
-
-.captcha img {
-    padding: 20px;
-}
-
-.captcha input {
-    width: 50% !important;
 }
 
 
 /* Comments List */
-.comments-list {
-    margin: 20px auto;
+.comments-container {
+    background-color: rgba(211, 211, 211, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 20px;
+    margin: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    color: #FFF;
+    overflow: hidden;
+    text-align: center;
 }
 
+
+
 .comment {
-    background-color: #252525;
-    padding: 15px;
-    border-radius: 5px;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 10px;
     margin-bottom: 10px;
+    text-align: left;
+}
+
+.comment-head-date-delete {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    width: 420px;
 }
 
 .comment strong {
@@ -743,70 +807,101 @@ a:hover {
 
 
 /* New Post */
-.bounty-form {
+.bounties-container {
+    display: flex;
+    justify-content: center;    
+    align-items: center;
+}
+
+.bounties-form-wrapper {
     width: 50%;
-    margin: auto;
-/*    display: table;*/
+    background-color: rgba(211, 211, 211, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    color: #FFF;
+    border-radius: 20px;
+    padding: 30px 40px;
+    margin: 40px auto;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
 }
 
-fieldset {
-    display: grid;
-    border: none;
-    border-radius: 10px;
-    padding: 10px;
-    box-shadow: 0 0 20px rgba(211, 211, 211, 0.5);
-}
-
-fieldset > div {
-    display: inline-grid;
-    margin: 0 20px 10px;
+.bounty-form legend {
+    color: #FBE778;
+    font-size: 20px;
+    padding-bottom: 10px;
 }
 
 .bounty-form input[type="text"], 
 .bounty-form input[type="number"] {
     width: 100%;
-    padding: 10px;
-    border-radius: 20px;
-    border: 1.5px solid #333;
-    background-color: #000;
-    color: #fff;
-    font-size: 18px;
-    margin-bottom: 10px;
-    text-align: center;
-}
-
-.bounty-form textarea {
-    border-radius: 20px;
-    border: 1.5px solid #333;
-    background-color: #000;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    padding: 10px ;
+    border-radius: 40px;
     color: #FFF;
-    font-size: 18px;
+    font-size: 16px;
     margin-bottom: 10px;
     text-align: center;
 }
 
 .bounty-form select {
-    height: 40px;
-    border-radius: 20px;
-    border: 1.5px solid #333;
-    background-color: #000;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    outline: none;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    padding: 10px ;
+    border-radius: 40px;
     color: #FFF;
-    font-size: 18px;
+    font-size: 16px;
     margin-bottom: 10px;
     text-align: center;
-
 }
 
-.bounty-form input[type="file"] {
+.bounty-form input::placeholder {
+    color: #FFF;
+}
 
+.bounty-form label {
+    margin: 20px 0;
+}
+
+.bounty-form input[type=file]::file-selector-button {
+    background: transparent; 
+    background-position-x: 0%;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    color: #FFF;
+    padding: 10px;
+    margin: 20px;
+    transition: background-color 0.3s ease;
+}
+ 
+.bounty-form input[type="file"]::-webkit-file-upload-button:hover {
+    background-color: #0066CC;
+    background-position-x: 100%;
+}
+
+.button-post {
+    display: flex;
+    justify-content: center;
+}
+
+.button-update {
+    display: flex;
+    justify-content: center;
 }
 
 .bounty-form input[type="submit"] {
-    width: 100%;
+    width: 40%;
     padding: 10px;
     border-radius: 20px;
     background-color: #0A84FF;
-    color: white;
+    color: #FFF;
     font-size: 18px;    
     border: none;
     cursor: pointer;
@@ -816,6 +911,39 @@ fieldset > div {
 .bounty-form input[type="submit"]:hover {
     background-color: #0066CC;
 }
+
+.remove-image {
+    padding: 10px 0;
+    margin-bottom: 10px;
+}
+
+.remove-image input[type="checkbox"] {
+    padding: 80px ;
+}
+
+.delete-form {
+    margin: 20px 0 ;
+}
+
+.button-delete {
+    display: flex;
+    justify-content: center;
+}
+
+.button-delete input {
+    width: 40%;
+    padding: 10px;
+    border-radius: 20px;
+    background-color: #BE1E2D;
+    color: #FFF;
+    font-size: 18px;    
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+
+
 
 
 
@@ -943,20 +1071,4 @@ td a, td form {
 }
 
 
-/* Testing Upload button */
-.bounty-form input[type=file]::file-selector-button {
-  background-color: #a99a86; /* Change the background color to match your site */
-  background-position-x: 0%;
-  background-size: 30%; /* Adjust the background size to make it smaller */
-  border: 0;
-  border-radius: 8px;
-  color: #fff;
-  padding: 0.5rem 0.75rem; /* Adjust padding to make it smaller */
-  transition: all 0.25s;
-}
- 
-input[type="file"]::-webkit-file-upload-button:hover {
-  background-color: #856d52; /* Change the background color to match your site */
-  background-position-x: 100%;
-}
 

@@ -26,7 +26,16 @@
     }
 
     // Build and prepare SQL String with :bounty_id placeholder parameter
-    $query = "SELECT * FROM bounties WHERE bounty_id = :bounty_id LIMIT 1";
+    $query =  "
+            SELECT b.*, 
+                sp.name AS species_name,
+                st.name AS status_name,
+                df.name AS difficulty_name
+            FROM bounties b 
+            LEFT JOIN species sp ON b.species_id = sp.species_id
+            LEFT JOIN status st ON b.status_id = st.status_id
+            LEFT JOIN difficulty df ON b.difficulty_id = df.difficulty_id
+            WHERE bounty_id = :bounty_id LIMIT 1";
     $statement = $db->prepare($query);
 
 
@@ -109,13 +118,15 @@
 
         <?php include('header.php'); ?>
         <div class="details-wrapper">
-            <main id="bounties-details">
+            <div class="bounties-details">
                 <h2><?= $row['title'] ?></h2>
                 <div class="date-stamp">
                     <small><?= date("F d, Y, h:i a", strtotime($row['bounty_date'])) ?></small>
                 </div>
                 <?php if ($_SESSION['is_admin'] === true): ?>
-                    <a href="edit_bounty.php?bounty_id=<?= $row['bounty_id'] ?>">edit</a>
+                    <div class="bounty-edit-details">
+                        <a href="edit_bounty.php?bounty_id=<?= $row['bounty_id'] ?>">edit</a>
+                    </div>
                 <?php endif ?>
                 <div class="bounties-description">
                     <?php if (!empty($row['image_path'])): ?>
@@ -125,44 +136,54 @@
                     <?php endif; ?>
                     <p><strong>Description:</strong> <?= $row['description'] ?></p>
                     <p><strong>Name:</strong> <?= $row['name'] ?></p>
-                    <p><strong>Species:</strong> <?= $row['species'] ?></p>
+                    <p><strong>Species:</strong> <?= $row['species_name'] ?></p>
+                    <p><strong>Difficulty:</strong> <?= $row['difficulty_name'] ?></p>
                     <p><strong>Reward:</strong> <?= number_format($row['reward']) ?> <span class="special-font">$ </span></p>
-                    <p><strong>Status:</strong> <?= $row['status'] ?></p>
+                    <p><strong>Status:</strong> <?= $row['status_name'] ?></p>
                 </div>
-            </main>
-            <div class="comments-section">
-                <h2>New Intel</h2>
+            </div>
+            <div class="new-comments">
                 <form method="POST" action="details.php?bounty_id=<?= $bounty_id ?>">
-                    <div>
-                        <!-- <label for="username">Name</label> -->
+                    <legend>New Intel</legend>
+                    <div class="name-text-inputs">
                         <input type="text" id="username" name="username" placeholder="Name" value="<?= htmlspecialchars($_POST['username'] ?? '') ?>" />
-                    </div>
-                    <div>
-                        <!-- <label for="comment_text">Comment</label> -->
-                        <textarea name="comment_text" placeholder="Enter your comments or intel" rows="4" required><?= htmlspecialchars($_POST['comment_text'] ?? '') ?></textarea>
+                        <textarea name="comment_text" placeholder="Enter your comments or intel" rows="3" required><?= htmlspecialchars($_POST['comment_text'] ?? '') ?></textarea>
                     </div>
                     <div class="captcha">
-                        <img src="captcha.php" alt="CAPTCHA" />
-                        <input type="text" name="captcha" placeholder="Enter CAPTCHA" required />
-                        <?php if (!empty($error)): ?>
-                            <div class="error"><?= htmlspecialchars($error) ?></div>
-                        <?php endif ?>
+                        <div class="captcha-img">
+                            <img src="captcha.php" alt="CAPTCHA" />
+                        </div>
+                        <div class="captcha-input">
+                            <input type="text" name="captcha" placeholder="Enter CAPTCHA" required />
+                        </div>
+                        <div class="button-comment">
+                            <button type="submit">Add Intel</button>
+                        </div>
                     </div>
-                    <button type="submit">Add Comment</button>
+                    <?php if (!empty($error)): ?>
+                            <div class="error"><?= htmlspecialchars($error) ?></div>
+                    <?php endif ?>
                 </form>
             </div>
-            <div class="comments-list">
-                <h2>Intels</h2>
-                <?php foreach ($comments as $comment): ?>
-                    <div class="comment">
-                        <p class="intel-by">Intel by <strong><?= htmlspecialchars($comment['username']) ?></strong><p>
-                        <p><?= htmlspecialchars($comment['comment_text']) ?></p>
-                        <small>On <?= date("F d, Y, h:i a", strtotime($comment['comment_date'])) ?></small>
-                        <?php if ($_SESSION['is_admin'] === true): ?>
-                            <a href="moderate.php?comment_id=<?= $comment['comment_id'] ?>">Delete</a>
-                        <?php endif; ?>
+            <div class="comments-container">
+                <div class="comments-list">
+                    <h2>Intels</h2>
+                    <?php foreach ($comments as $comment): ?>
+                        <div class="comment">
+                            <div class="comment-head-date-delete">
+                                <p class="intel-by">Intel by <strong><?= htmlspecialchars($comment['username']) ?></strong><p>
+                                <small>On <?= date("F d, Y, h:i a", strtotime($comment['comment_date'])) ?></small>
+                                <?php if ($_SESSION['is_admin'] === true): ?>
+                                    <div>
+                                        <a href="moderate.php?comment_id=<?= $comment['comment_id'] ?>&bounty_id=<?= $row['bounty_id'] ?>"><i class="bi bi-trash"></i></a>
+                                    </div>
+                                <?php endif; ?>                                
+                            </div>
+                            <p><?= htmlspecialchars($comment['comment_text']) ?></p>
+
+                        </div>
+                    <?php endforeach; ?>
                     </div>
-                <?php endforeach; ?>
             </div>
         </div>
         <?php include('footer.php'); ?>

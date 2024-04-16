@@ -246,90 +246,93 @@
     <div class="wrapper">
         
         <?php include('header.php'); ?>
-        <div id="bounties-form">
-            <?php if($bounty_id): ?>
-                <?php if(!empty($error)): ?>
-                    <p class="error"><?= $error ?></p>
-                <?php endif ?>
-                <form method="post" action="edit_bounty.php?bounty_id=<?= $bounties['bounty_id'] ?>" enctype="multipart/form-data">
-                    <fieldset>
-                        <legend>Edit Post</legend>
-                        <div>
-                            <input type="hidden" name="bounty_id" value="<?= $bounties['bounty_id'] ?>">
-                        </div>
-                        <div>
-                            <label for="title">Title</label>
-                            <input type="text" id="title" name="title" value="<?= $bounties['title'] ?>">
-                        </div>
-                        <div>
-                            <label for="name">Name</label>
-                            <input type="text" id="name" name="name" value="<?= $bounties['name'] ?>"/>
-                        </div>
-                        <div>
-                            <label for="species_id">Species</label>
-                            <select id="species_id" name="species_id">
-                                <?php foreach (fetchSpecies($db) as $specie): ?>
-                                    <option value="<?= htmlspecialchars($specie['species_id']) ?>" <?= $specie['species_id'] == $bounties['species_id'] ? 'selected' : '' ?>>
-                                        <?= htmlspecialchars($specie['name']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="status_id">Status</label>
-                            <select id="status_id" name="status_id">
-                                <?php foreach (fetchStatus($db) as $status): ?>
-                                    <option value="<?= htmlspecialchars($status['status_id']) ?>" <?= $status['status_id'] == $bounties['status_id'] ? 'selected' : '' ?>><?= htmlspecialchars($status['name']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="difficulty_id">Difficulty</label>
-                            <select id="difficulty_id" name="difficulty_id">
-                                <?php foreach (fetchDifficulty($db) as $difficulty): ?>
-                                    <option value="<?= htmlspecialchars($difficulty['difficulty_id']) ?>" <?= $difficulty['difficulty_id'] == $bounties['difficulty_id'] ? 'selected' : '' ?>>
-                                        <?= htmlspecialchars($difficulty['name']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="reward">Reward</label>
-                            <input type="number" id="reward" name="reward" value="<?= $bounties['reward'] ?>"/>
-                        </div>
-                        <div>
-                            <label for="description">Description</label>
-                            <textarea id="description" name="description"><?= $bounties['description'] ?></textarea>
-                        </div>
-                        <div>
-                            <label for="bounty_image">Bounty Image</label>
-                            <input type="file" id="bounty_image" name="bounty_image" />
-                        </div>
-                        
-                        <!-- Remove image checkbox-->
-                        <?php if (!empty($bounties['image_path'])): ?>
+        <div class="bounties-container">
+            <div class="bounties-form-wrapper">
+                <?php if($bounty_id): ?>
+                    <?php if(!empty($error)): ?>
+                        <p class="error"><?= $error ?></p>
+                    <?php endif ?>
+                    <form method="post" action="edit_bounty.php?bounty_id=<?= $bounties['bounty_id'] ?>" class="bounty-form" enctype="multipart/form-data">
+                            <legend>Edit Post</legend>
                             <div>
-                                <label for="remove_image">Remove Image</label>
-                                <input type="checkbox" id="remove_image" name="remove_image">
+                                <input type="hidden" name="bounty_id" value="<?= $bounties['bounty_id'] ?>">
                             </div>
-                        <?php endif; ?>
-                        <!-- Remove image checkbox-->
+                            <div>
+                                <label for="title">Title</label>
+                                <input type="text" id="title" name="title" value="<?= $bounties['title'] ?>">
+                            </div>
+                            <div>
+                                <label for="name">Name</label>
+                                <input type="text" id="name" name="name" value="<?= $bounties['name'] ?>"/>
+                            </div>
+                            <div>
+                                <label for="species_id">Species</label>
+                                <select id="species_id" name="species_id">
+                                    <?php foreach (fetchSpecies($db) as $specie): ?>
+                                        <option value="<?= htmlspecialchars($specie['species_id']) ?>" <?= $specie['species_id'] == $bounties['species_id'] ? 'selected' : '' ?>>
+                                            <?= htmlspecialchars($specie['name']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="status_id">Status</label>
+                                <select id="status_id" name="status_id">
+                                    <?php foreach (fetchStatus($db) as $status): ?>
+                                        <option value="<?= htmlspecialchars($status['status_id']) ?>" <?= $status['status_id'] == $bounties['status_id'] ? 'selected' : '' ?>><?= htmlspecialchars($status['name']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="difficulty_id">Difficulty</label>
+                                <select id="difficulty_id" name="difficulty_id">
+                                    <?php foreach (fetchDifficulty($db) as $difficulty): ?>
+                                        <option value="<?= htmlspecialchars($difficulty['difficulty_id']) ?>" <?= $difficulty['difficulty_id'] == $bounties['difficulty_id'] ? 'selected' : '' ?>>
+                                            <?= htmlspecialchars($difficulty['name']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="reward">Reward</label>
+                                <input type="number" id="reward" name="reward" value="<?= $bounties['reward'] ?>"/>
+                            </div>
+                            <div>
+                                <label for="description">Description</label>
+                                <textarea id="description" name="description"><?= $bounties['description'] ?></textarea>
+                            </div>
+                            <div>
+                                <label for="bounty_image">Bounty Image</label>
+                                <input type="file" id="bounty_image" name="bounty_image" />
+                            </div>
+                            
+                            <!-- Remove image checkbox-->
+                            <?php if (!empty($bounties['image_path'])): ?>
+                                <div class="remove-image">
+                                    <label for="remove_image">Remove Image? </label>
+                                    <input type="checkbox" id="remove_image" name="remove_image">
+                                </div>
+                            <?php endif; ?>
+                            <!-- Remove image checkbox-->
 
-                        <div class="button-edit">
-                            <input type="submit" name="action" value="Update">
-                            <!-- <input type="submit" name="action" value="Delete"> -->
-                            <!-- <a href="delete_bounty.php?bounty_id=<?= $bounties['bounty_id'] ?>">Delete</a> -->
+                            <div class="button-update">
+                                <input type="submit" name="action" value="Update">
+                                <!-- <input type="submit" name="action" value="Delete"> -->
+                                <!-- <a href="delete_bounty.php?bounty_id=<?= $bounties['bounty_id'] ?>">Delete</a> -->
+                            </div>
+                    </form>
+                    <form method="post" action="delete_bounty.php" class="delete-form" enctype="multipart/form-data">
+                        <div class="button-delete">
+                            <input type="hidden" name="bounty_id" value="<?= $bounties['bounty_id'] ?>">
+                            <input type="hidden" name="redirect_to" value="content.php">
+                            <input type="submit" name="action" value="Delete">
                         </div>
-                    </fieldset>
-                </form>
-                <form method="post" action="delete_bounty.php" enctype="multipart/form-data">
-                    <input type="hidden" name="bounty_id" value="<?= $bounties['bounty_id'] ?>">
-                    <input type="hidden" name="redirect_to" value="content.php">
-                    <input type="submit" name="action" value="Delete">
-                </form>
-            <?php endif ?>
+                    </form>
+                <?php endif ?>
+            </div>
         </div>
+
         <?php include('footer.php'); ?>
     </div>
 
